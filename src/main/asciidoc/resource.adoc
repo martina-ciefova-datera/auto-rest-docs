@@ -1,0 +1,5 @@
+[[resources-resource]]
+== Resource
+
+include::{snippets}/resource/get-entity/auto-section.adoc[]
+include::{snippets}/resource/post-entity/auto-section.adoc[]

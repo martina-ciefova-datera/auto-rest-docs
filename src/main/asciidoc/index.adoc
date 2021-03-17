@@ -1,0 +1,15 @@
+= Java WebTestClient Example API Documentation
+:doctype: book
+:page-layout!:
+:toc: right
+:toclevels: 2
+:sectanchors:
+:sectlinks:
+:sectnums:
+:linkattrs:
+:source-highlighter: highlightjs
+
+[[resources]]
+= Resources
+
+include::resource.adoc[]
