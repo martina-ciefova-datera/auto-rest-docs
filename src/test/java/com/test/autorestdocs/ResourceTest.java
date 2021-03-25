@@ -1,25 +1,50 @@
 package com.test.autorestdocs;
 
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Mono;
 
 /**
  *
  * @author Martina Ciefova
  */
+@ActiveProfiles("test")
 @WebFluxTest(controllers = Resource.class)
+@Import(ModelMapper.class)
 public class ResourceTest extends WebTestClientTestBase {
+
+    @MockBean
+    private Repository repository;
+
     @Test
     public void getEntity() {
+        Long id = 16L;
+        String name = "name";
+        Integer code = 100;
+
+        Model model = new Model();
+        model.setId(id);
+        model.setCode(code);
+        model.setName(name);
+
+        when(repository.findById(any(Long.class)))
+                .thenReturn(Optional.of(model));
+
         webTestClient.get().uri("/test/1").exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.id").isEqualTo(1)
-                .jsonPath("$.code").isEqualTo(100)
-                .jsonPath("$.name").isEqualTo("name")
+                .jsonPath("$.id").isEqualTo(id)
+                .jsonPath("$.code").isEqualTo(code)
+                .jsonPath("$.name").isEqualTo(name)
                 .consumeWith(document("resource/{method-name}"));
     }
 

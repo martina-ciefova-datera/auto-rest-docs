@@ -1,0 +1,23 @@
+## YAML Template.
+---
+spring:
+    webflux:
+        format: 
+            date: iso
+            date-time: yyyy-MM-dd HH:mm:ss
+            time: HH:mm:ss
+    jackson:
+        serialization:
+            write-dates-as-timestamps: false
+    profiles:
+        active: "test"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "configprops, info, env"
+  endpoint:
+    configprops:
+      enabled: true
+        

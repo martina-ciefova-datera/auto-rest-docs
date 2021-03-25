@@ -8,8 +8,8 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @SpringBootApplication
 public class AutoRestDocsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AutoRestDocsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AutoRestDocsApplication.class, args);
+    }
 
 }

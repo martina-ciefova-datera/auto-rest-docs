@@ -1,0 +1,4 @@
+## YAML Template.
+---
+test:
+    magic-value: "xxx"

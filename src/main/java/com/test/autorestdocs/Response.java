@@ -1,12 +1,13 @@
 package com.test.autorestdocs;
 
+import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Martina Ciefova
  */
-public class Response extends Request {
+public class Response extends Request implements Serializable {
 
     @NotNull
     private Long id;
@@ -21,5 +22,5 @@ public class Response extends Request {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
 }
