@@ -10,7 +10,7 @@ spring:
         serialization:
             write-dates-as-timestamps: false
     profiles:
-        active: "test"
+        active: test,jwt
 
 management:
   endpoints:
@@ -20,4 +20,9 @@ management:
   endpoint:
     configprops:
       enabled: true
-        
+      
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

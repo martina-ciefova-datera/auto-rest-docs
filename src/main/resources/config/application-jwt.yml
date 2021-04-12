@@ -1,0 +1,6 @@
+## YAML Template.
+---
+jwt:
+  issuer: "datera.cz"
+  expiration: 1800
+  algorithm: "HS256"

@@ -2,10 +2,12 @@ package com.test.autorestdocs;
 
 import capital.scalable.restdocs.AutoDocumentation;
 import capital.scalable.restdocs.webflux.WebTestClientInitializer;
+import com.test.autorestdocs.security.SecurityConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.cli.CliDocumentation;
@@ -19,6 +21,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  * @author Martina Ciefova
  */
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
+@Import(SecurityConfiguration.class)
 public abstract class WebTestClientTestBase {
 
     @Autowired

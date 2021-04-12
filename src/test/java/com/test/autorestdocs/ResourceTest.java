@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Mono;
 
@@ -17,7 +18,7 @@ import reactor.core.publisher.Mono;
  *
  * @author Martina Ciefova
  */
-@ActiveProfiles("test")
+@ActiveProfiles({"test","jwt"})
 @WebFluxTest(controllers = Resource.class)
 @Import(ModelMapper.class)
 public class ResourceTest extends WebTestClientTestBase {
@@ -26,6 +27,7 @@ public class ResourceTest extends WebTestClientTestBase {
     private Repository repository;
 
     @Test
+    @WithMockUser
     public void getEntity() {
         Long id = 16L;
         String name = "name";
@@ -49,6 +51,7 @@ public class ResourceTest extends WebTestClientTestBase {
     }
 
     @Test
+    @WithMockUser
     public void postEntity() {
         Request request = new Request();
         request.setCode(200);
