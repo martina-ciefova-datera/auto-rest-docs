@@ -2,8 +2,10 @@ package com.test.autorestdocs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 
 //@EnableWebFlux
+@Configuration
 @SpringBootApplication
 public class AutoRestDocsApplication {
 

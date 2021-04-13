@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +31,7 @@ public class LoginController {
      * @param principal user
      * @return login message
      */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Mono<ResponseEntity> greet(Mono<Principal> principal) {
 
         return principal

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Mono;
 
@@ -18,7 +19,7 @@ import reactor.core.publisher.Mono;
  *
  * @author Martina Ciefova
  */
-@ActiveProfiles({"test","jwt"})
+@ActiveProfiles({"test", "jwt", "ldap", "captcha"})
 @WebFluxTest(controllers = Resource.class)
 @Import(ModelMapper.class)
 public class ResourceTest extends WebTestClientTestBase {
@@ -57,7 +58,7 @@ public class ResourceTest extends WebTestClientTestBase {
         request.setCode(200);
         request.setName("name");
 
-        webTestClient.post().uri("/test")
+        webTestClient.mutateWith(csrf()).post().uri("/test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), Request.class)
                 .exchange()

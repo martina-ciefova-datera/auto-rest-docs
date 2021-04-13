@@ -36,6 +36,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-ldap</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -127,6 +131,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.test.autorestdocs.AutoRestDocsApplication</mainClass>
+                </configuration> 
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -138,6 +145,7 @@
                         <org.springframework.restdocs.outputDir>
                             ${project.build.directory}/generated-snippets 
                         </org.springframework.restdocs.outputDir>
+                        <!--loads javadoc comments for controller methods-->
                         <org.springframework.restdocs.javadocJsonDir>
                             ${project.build.directory}/generated-javadoc-json 
                         </org.springframework.restdocs.javadocJsonDir>
@@ -158,8 +166,8 @@
                             <doclet>capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet</doclet>
                             <docletArtifact>
                                 <groupId>capital.scalable</groupId>
-                                <artifactId>spring-auto-restdocs-json-doclet</artifactId> 
-                                <version>2.0.9</version>
+                                <artifactId>spring-auto-restdocs-json-doclet-jdk9</artifactId> 
+                                <version>2.0.10</version>
                             </docletArtifact>
                             <destDir>generated-javadoc-json</destDir> 
                             <reportOutputDirectory>${project.build.directory}</reportOutputDirectory> 

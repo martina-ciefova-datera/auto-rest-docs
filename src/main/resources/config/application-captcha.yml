@@ -1,0 +1,5 @@
+## YAML Template.
+---
+captcha:
+  verify-url: "https://www.google.com/recaptcha/api/siteverify"
+  secret-key: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"

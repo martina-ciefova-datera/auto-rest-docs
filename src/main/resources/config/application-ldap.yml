@@ -1,0 +1,15 @@
+## YAML Template.
+---
+ldap:
+  bind-url: ldap://10.0.103.200:389
+  bind-username: "CN=tech-bind,CN=Users,DC=rav,DC=dev"
+  bind-password: "701E8a6e1b"
+  base-dn: "DC=rav,DC=dev"
+  user-dn-pattern: "CN={0},CN=Users,DC=rav,DC=dev"
+  search-user-filter-pattern: "(&(sAMAccountName={0})(objectClass=Person))"
+  user-username-attribute: "sAMAccountName"
+  user-fullname-attribute: "displayName"
+  user-email-attribute: "mail"
+  user-groups-attribute: "memberOf"
+  user-group-name-pattern: "CN=(?<groupName>[^,]+)"
+  group-search-base: "CN=Users,DC=rav,DC=dev"

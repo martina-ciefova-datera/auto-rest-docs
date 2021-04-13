@@ -10,7 +10,7 @@ spring:
         serialization:
             write-dates-as-timestamps: false
     profiles:
-        active: test,jwt
+        active: test,jwt,ldap,captcha
 
 management:
   endpoints:

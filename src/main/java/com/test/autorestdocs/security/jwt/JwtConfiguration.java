@@ -16,8 +16,7 @@ public class JwtConfiguration {
 
     @Bean
     public AuthenticationWebFilter
-            jwtWebFilter(JwtTokenCreator creator,
-                         JwtAuthenticationManager manager,
+            jwtWebFilter(JwtAuthenticationManager manager,
                          JwtAuthenticationConverter converter) {
         AuthenticationWebFilter jwtAuthFilter = new AuthenticationWebFilter(manager);
         jwtAuthFilter.setServerAuthenticationConverter(converter);

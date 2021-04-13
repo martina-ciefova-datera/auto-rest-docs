@@ -30,6 +30,12 @@ public class Resource {
 
     private final ModelMapper mapper;
 
+    /**
+     *
+     * @param properties
+     * @param repository
+     * @param mapper
+     */
     @Autowired
     public Resource(TestProperties properties, Repository repository,
                     ModelMapper mapper) {
@@ -39,9 +45,9 @@ public class Resource {
     }
 
     /**
-     * Returns entity with a required id.
+     * Loads entity.
      *
-     * @param id entity id
+     * @param id
      * @return entity
      */
     @GetMapping("/{id}")
@@ -52,6 +58,12 @@ public class Resource {
         return Mono.just(response);
     }
 
+    /**
+     * Creates entity.
+     *
+     * @param request
+     * @return new entity
+     */
     @PostMapping
     public Mono<Response> postEntity(@Valid @RequestBody Request request) {
         Model entity = mapper.map(request, Model.class);
@@ -60,8 +72,13 @@ public class Resource {
         return Mono.just(mapper.map(entity, Response.class));
     }
 
+    /**
+     * Returns current time.
+     *
+     * @return time
+     */
     @GetMapping("/now")
-    public Mono<Date> getEntity() {
+    public Mono<Date> getDate() {
         return Mono.just(new Date());
     }
 }
