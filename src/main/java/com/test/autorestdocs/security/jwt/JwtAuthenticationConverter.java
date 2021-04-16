@@ -1,5 +1,6 @@
 package com.test.autorestdocs.security.jwt;
 
+import java.util.Optional;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -23,6 +24,19 @@ public class JwtAuthenticationConverter implements ServerAuthenticationConverter
 
     @Override
     public Mono<Authentication> convert(ServerWebExchange swe) {
+
+        Optional<String> token = parseToken(swe);
+
+        if (token.isEmpty()) {
+            return Mono.empty();
+        } else {
+            return Mono.just(
+                    new UsernamePasswordAuthenticationToken(token.get(),
+                                                            token.get()));
+        }
+    }
+
+    public Optional<String> parseToken(ServerWebExchange swe) {
         ServerHttpRequest request = swe.getRequest();
 
         String authorization
@@ -30,11 +44,9 @@ public class JwtAuthenticationConverter implements ServerAuthenticationConverter
                         .getFirst(HttpHeaders.AUTHORIZATION);
 
         if (!StringUtils.startsWithIgnoreCase(authorization, PREFIX)) {
-            return Mono.empty();
+            return Optional.empty();
         }
 
-        String authorizationToken = authorization.substring(PREFIX.length());
-
-        return Mono.just(new UsernamePasswordAuthenticationToken(authorizationToken, authorizationToken));
+        return Optional.of(authorization.substring(PREFIX.length()));
     }
 }

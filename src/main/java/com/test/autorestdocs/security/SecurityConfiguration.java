@@ -8,6 +8,7 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 
 /**
  *
@@ -20,7 +21,8 @@ public class SecurityConfiguration {
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
                                                 AuthenticationWebFilter jwtWebFilter,
-                                                AuthenticationWebFilter ldapWebFilter) {
+                                                AuthenticationWebFilter ldapWebFilter,
+                                                ServerLogoutSuccessHandler logoutSuccessHandler) {
 
         return http
                 .csrf().disable()
@@ -29,6 +31,9 @@ public class SecurityConfiguration {
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyExchange().authenticated()
+                .and()
+                .logout()
+                    .logoutSuccessHandler(logoutSuccessHandler)
                 .and()
                 .addFilterAt(ldapWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .addFilterAt(jwtWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)

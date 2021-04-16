@@ -2,10 +2,10 @@ package com.test.autorestdocs.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Profile;
@@ -42,7 +42,7 @@ public class JwtTokenParser {
         return parseClaims(token).getSubject();
     }
 
-    protected Date parseExpiration(String token) {
+    public Date parseExpiration(String token) {
         return parseClaims(token).getExpiration();
     }
 
@@ -51,12 +51,22 @@ public class JwtTokenParser {
     }
 
     protected List<GrantedAuthority> parseAuthorities(String token) {
-        return Stream.ofNullable(
-                parseClaims(token)
-                        .get(JwtUserParser.ROLE, List.class))
-                .map(Object::toString)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        List roles = parseClaims(token)
+                .get(JwtUserParser.ROLE, List.class);
+
+        if (roles == null) {
+            return new ArrayList<>();
+        }
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(map
+                -> ((LinkedHashMap<String, String>) map)
+                        .values()
+                        .stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .forEach(authorities::add));
+
+        return authorities;
     }
 
     public UsernamePasswordAuthenticationToken

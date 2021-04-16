@@ -23,9 +23,13 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
 
     private final JwtTokenParser parser;
 
+    private final JwtTokenValidator validator;
+
     @Autowired
-    public JwtAuthenticationManager(JwtTokenParser parser) {
+    public JwtAuthenticationManager(JwtTokenParser parser,
+                                    JwtTokenValidator validator) {
         this.parser = parser;
+        this.validator = validator;
     }
 
     @Override
@@ -33,15 +37,15 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
         String token = a.getCredentials().toString();
 
         try {
-            if (!parser.checkTokenExpired(token)) {
+            if (validator.tokenValid(token)) {
                 return Mono.just(parser.parseUser(token));
+            } else {
+                return Mono.error(new JwtSecurityException("Invalid token"));
             }
         } catch (SignatureException ex) {
             LOGGER.error("Token parsing failed. {}", ex.getMessage());
             return Mono.error(new JwtSecurityException("Invalid token", ex));
         }
-
-        return Mono.empty();
     }
 
 }
