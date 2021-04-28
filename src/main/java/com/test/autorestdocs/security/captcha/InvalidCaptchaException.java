@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class InvalidCaptchaException extends RuntimeException {
 
     public InvalidCaptchaException() {
+        super("Invalid Captcha.");
     }
 
     public InvalidCaptchaException(String message) {

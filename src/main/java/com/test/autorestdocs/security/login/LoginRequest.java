@@ -1,4 +1,4 @@
-package com.test.autorestdocs.security;
+package com.test.autorestdocs.security.login;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
