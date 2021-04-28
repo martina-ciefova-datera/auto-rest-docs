@@ -1,13 +1,10 @@
 package com.test.autorestdocs;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -19,13 +16,13 @@ import reactor.core.publisher.Mono;
  *
  * @author Martina Ciefova
  */
-@ActiveProfiles({"test", "jwt", "ldap", "captcha"})
+@ActiveProfiles({"test"})
 @WebFluxTest(controllers = Resource.class)
-@Import(ModelMapper.class)
+//@Import(ModelMapper.class)
 public class ResourceTest extends WebTestClientTestBase {
 
     @MockBean
-    private Repository repository;
+    private ServiceClass service;
 
     @Test
     @WithMockUser
@@ -34,13 +31,13 @@ public class ResourceTest extends WebTestClientTestBase {
         String name = "name";
         Integer code = 100;
 
-        Model model = new Model();
-        model.setId(id);
-        model.setCode(code);
-        model.setName(name);
+        Response response = new Response();
+        response.setId(id);
+        response.setCode(code);
+        response.setName(name);
 
-        when(repository.findById(any(Long.class)))
-                .thenReturn(Optional.of(model));
+        when(service.findEntity(any(Long.class)))
+                .thenReturn(Mono.just(response));
 
         webTestClient.get().uri("/test/1").exchange()
                 .expectStatus().isOk()
@@ -54,9 +51,21 @@ public class ResourceTest extends WebTestClientTestBase {
     @Test
     @WithMockUser
     public void postEntity() {
+        Long id = 16L;
+        String name = "name";
+        Integer code = 100;
+
         Request request = new Request();
-        request.setCode(200);
-        request.setName("name");
+        request.setCode(code);
+        request.setName(name);
+
+        Response response = new Response();
+        response.setName(name);
+        response.setCode(code);
+        response.setId(id);
+
+        when(service.createEntity(any(Request.class)))
+                .thenReturn(Mono.just(response));
 
         webTestClient.mutateWith(csrf()).post().uri("/test")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,8 +73,9 @@ public class ResourceTest extends WebTestClientTestBase {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.code").isEqualTo(200)
-                .jsonPath("$.name").isEqualTo("name")
+                .jsonPath("$.id").isEqualTo(id)
+                .jsonPath("$.code").isEqualTo(code)
+                .jsonPath("$.name").isEqualTo(name)
                 .consumeWith(document("resource/{method-name}"));
     }
 }
