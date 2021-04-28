@@ -2,7 +2,6 @@ package com.test.autorestdocs;
 
 import java.util.Date;
 import javax.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -26,22 +25,17 @@ public class Resource {
 
     private final TestProperties properties;
 
-    private final Repository repository;
-
-    private final ModelMapper mapper;
+    private final ServiceClass service;
 
     /**
      *
      * @param properties
-     * @param repository
-     * @param mapper
+     * @param service
      */
     @Autowired
-    public Resource(TestProperties properties, Repository repository,
-                    ModelMapper mapper) {
+    public Resource(TestProperties properties, ServiceClass service) {
         this.properties = properties;
-        this.repository = repository;
-        this.mapper = mapper;
+        this.service = service;
     }
 
     /**
@@ -52,10 +46,7 @@ public class Resource {
      */
     @GetMapping("/{id}")
     public Mono<Response> getEntity(@PathVariable Long id) {
-        Model entity = repository.findById(id).orElse(null);
-        Response response = mapper.map(entity, Response.class);
-
-        return Mono.just(response);
+        return service.findEntity(id);
     }
 
     /**
@@ -66,10 +57,7 @@ public class Resource {
      */
     @PostMapping
     public Mono<Response> postEntity(@Valid @RequestBody Request request) {
-        Model entity = mapper.map(request, Model.class);
-        repository.save(entity);
-
-        return Mono.just(mapper.map(entity, Response.class));
+        return service.createEntity(request);
     }
 
     /**
