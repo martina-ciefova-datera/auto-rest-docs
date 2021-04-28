@@ -36,7 +36,7 @@ public class JwtTokenCreator {
         return Jwts.builder()
                 .setIssuer(properties.getIssuer())
                 .setSubject(user.getUsername())
-                .addClaims(userParser.parseClaims(user))
+//                .addClaims(userParser.parseClaims(user))
                 .setIssuedAt(Date.from(creationTime))
                 .setExpiration(Date.from(expiration))
                 .signWith(properties.getSecret(), properties.getAlgorithm())

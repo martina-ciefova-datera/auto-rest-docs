@@ -1,18 +1,16 @@
 package com.test.autorestdocs.security.ldap;
 
-import com.test.autorestdocs.security.LoginAuthenticationConverter;
-import com.test.autorestdocs.security.captcha.CaptchaAuthenticationSuccessHandler;
+import com.test.autorestdocs.security.login.LoginAuthenticationManager;
+import com.test.autorestdocs.security.login.LoginAuthenticationManagerAdapter;
 import java.util.Arrays;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
+import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.ReactiveAuthenticationManagerAdapter;
 import org.springframework.security.ldap.authentication.BindAuthenticator;
 import org.springframework.security.ldap.authentication.LdapAuthenticationProvider;
 import org.springframework.security.ldap.authentication.LdapAuthenticator;
@@ -21,8 +19,6 @@ import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
 import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
-import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 
 /**
  *
@@ -148,24 +144,15 @@ public class LdapConfiguration {
 
     @Bean
     @Primary
-    public ReactiveAuthenticationManager
+    public LoginAuthenticationManager
             ldapAuthenticationManager(LdapAuthenticationProvider ldapAuthenticationProvider) {
-        return new ReactiveAuthenticationManagerAdapter(
+        return new LoginAuthenticationManagerAdapter(
                 new ProviderManager(Arrays.asList(ldapAuthenticationProvider)));
     }
 
     @Bean
-    public AuthenticationWebFilter
-            ldapWebFilter(ReactiveAuthenticationManager ldapAuthenticationManager,
-                          LoginAuthenticationConverter converter,
-                          CaptchaAuthenticationSuccessHandler successHandler) {
-        AuthenticationWebFilter ldapAuthFilter
-                = new AuthenticationWebFilter(ldapAuthenticationManager);
-        ldapAuthFilter.setServerAuthenticationConverter(converter);
-        ldapAuthFilter.setRequiresAuthenticationMatcher(
-                ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/login"));
-        ldapAuthFilter.setAuthenticationSuccessHandler(successHandler);
-        return ldapAuthFilter;
+    public LdapTemplate ldapTemplate(LdapContextSource contextSource) {
+        return new LdapTemplate(contextSource);
     }
 
 }
