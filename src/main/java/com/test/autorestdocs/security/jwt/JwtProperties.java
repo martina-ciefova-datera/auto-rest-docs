@@ -1,5 +1,6 @@
 package com.test.autorestdocs.security.jwt;
 
+import com.test.autorestdocs.security.jwt.blacklist.clean.BlacklistCleanerProperties;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -32,13 +33,17 @@ public class JwtProperties {
 
     private Key secret;
 
+    private BlacklistCleanerProperties blacklistCleaner;
+
     public JwtProperties(String issuer, Long expiration,
-                         @Name("algorithm") String algorithmCode) {
+                         @Name("algorithm") String algorithmCode,
+                         BlacklistCleanerProperties blacklistCleaner) {
         this.issuer = issuer;
         this.expiration = expiration;
         this.algorithmCode = algorithmCode;
         this.algorithm = SignatureAlgorithm.forName(algorithmCode);
         this.secret = Keys.secretKeyFor(algorithm);
+        this.blacklistCleaner = blacklistCleaner;
     }
 
     public String getIssuer() {

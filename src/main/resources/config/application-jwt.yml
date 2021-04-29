@@ -4,3 +4,5 @@ jwt:
   issuer: "datera.cz"
   expiration: 1800
   algorithm: "HS256"
+  blacklist-cleaner:
+      schedule: "0 0 * ? * *"
