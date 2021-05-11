@@ -22,13 +22,13 @@ public class LoginServiceImpl implements LoginService {
 
     private final LoginAuthenticationManager authentication;
 
-    private final CaptchaService captchaService;
+    private final Optional<CaptchaService> captchaService;
 
     private final JwtTokenCreator tokenCreator;
 
     @Autowired
     public LoginServiceImpl(LoginAuthenticationManager authentication,
-                            CaptchaService captchaService,
+                            Optional<CaptchaService> captchaService,
                             JwtTokenCreator tokenCreator) {
         this.authentication = authentication;
         this.captchaService = captchaService;
@@ -47,7 +47,8 @@ public class LoginServiceImpl implements LoginService {
                         Mono.error(new BadCredentialsException("Bad Credentials")))
                 .zipWith(Mono.just(Optional.ofNullable(captcha)))
                 .filter(tuple
-                        -> captchaService.verify(tuple.getT2()))
+                        -> captchaService.isEmpty() ? true
+                : captchaService.get().verify(tuple.getT2()))
                 .switchIfEmpty(Mono.error(InvalidCaptchaException::new))
                 .map(tuple
                         -> (UserDetails) tuple.getT1().getPrincipal())
